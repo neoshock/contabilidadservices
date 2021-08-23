@@ -18,5 +18,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.webexample.MainResource.class);
         resources.add(com.webexample.ExampleResource.class);
         resources.add(com.webexample.DiarioService.class);
+        resources.add(com.webexample.GrupoService.class);
     }
 }
