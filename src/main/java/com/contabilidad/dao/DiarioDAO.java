@@ -15,6 +15,7 @@ public class DiarioDAO {
     private ResultSet resultSet;
 
     public List<Diario> getDiariosContables() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         List<Diario> diarios = new ArrayList<>();
         String sql = String.format("select * from getDiariosContables();");
         try {
@@ -23,7 +24,7 @@ public class DiarioDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 diarios.add(new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        resultSet.getDate("fechaApertura"), resultSet.getDate("fechaCierre"), resultSet.getString("descripcion")));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion")));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -35,13 +36,14 @@ public class DiarioDAO {
 
     public Diario getDiarioById(int id) {
         Diario diario = new Diario();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String sql = String.format("SELECT * FROM public.diariocontable where iddiario = '%1$d'", id);
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
             while (resultSet.next()) {
                 diario = new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        resultSet.getDate("fechaApertura"), resultSet.getDate("fechaCierre"), resultSet.getString("descripcion"));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -53,13 +55,14 @@ public class DiarioDAO {
 
     public Diario findDiarioByNombre(String nombre) {
         Diario diario = new Diario();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String sql = String.format("SELECT * FROM public.diariocontable where nombre = '%1$s'", nombre);
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
             while (resultSet.next()) {
                 diario = new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        resultSet.getDate("fechaApertura"), resultSet.getDate("fechaCierre"), resultSet.getString("descripcion"));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -71,8 +74,7 @@ public class DiarioDAO {
 
     public boolean addNewDiario(Diario diario) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sql = String.format("select addNewDiario('%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),
-                dateFormat.format(diario.getFechaApertura()), dateFormat.format(diario.getFechaCierre()), diario.getDescripcion());
+        String sql = String.format("select addNewDiario('%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), diario.getDescripcion());
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
@@ -88,8 +90,7 @@ public class DiarioDAO {
 
     public boolean updateDiario(Diario diario) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sql = String.format("select updateDiarioContable('%5$d','%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),
-                dateFormat.format(diario.getFechaApertura()), dateFormat.format(diario.getFechaCierre()), diario.getDescripcion(), diario.getIdDiario());
+        String sql = String.format("select updateDiarioContable('%5$d','%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), diario.getDescripcion(), diario.getIdDiario());
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
