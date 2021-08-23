@@ -2,6 +2,7 @@
 package com.webexample;
 
 import com.contabilidad.dao.DiarioDAO;
+import com.google.gson.Gson;
 import com.webexample.models.Diario;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
@@ -12,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Path("diario")
@@ -31,8 +33,10 @@ public class DiarioService {
     @GET
     @Path("getdiarios")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Diario> getDiariosContables() {
-        return diarios;
+    public Response getDiariosContables() {
+        Gson json = new Gson();
+        String value = json.toJson(diarios, List.class);
+        return Response.ok(value).build();
     }
     
     @PUT

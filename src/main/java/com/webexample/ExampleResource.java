@@ -1,5 +1,6 @@
 package com.webexample;
 
+import com.google.gson.Gson;
 import com.webexample.models.Persona;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("Example")
-@RequestScoped
 public class ExampleResource {
 
     private List<Persona> personas = new ArrayList<>();
@@ -26,22 +27,19 @@ public class ExampleResource {
 
     }
 
-    @GET
     @Path("personas")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Persona> getJson() {
+    public Response getJson() {
         personas.add(new Persona("Manolo", "Cabrera", "Masculino"));
         personas.add(new Persona("Manolo", "Cabrera", "Masculino"));
         personas.add(new Persona("Manolo", "Cabrera", "Masculino"));
+        Gson json = new Gson();
+        String value = json.toJson(personas, List.class);
         //TODO return proper representation object
-        return personas;
+        return Response.ok(value).build();
     }
 
-    /**
-     * PUT method for updating or creating an instance of ExampleResource
-     *
-     * @param content representation for the resource
-     */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
