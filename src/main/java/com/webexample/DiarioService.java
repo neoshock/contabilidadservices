@@ -115,7 +115,7 @@ public class DiarioService {
         if (diarioDAO.deleteDiario(id).equals("Eliminacion Exitosa")) {
             message = "Se ha eliminado el diario contable";
         } else {
-            message = "El diario selecionado no se puede eliminar";
+            message = "El diario selecionado no se puede eliminar o no existe";
         }
         return Response.ok(getMessageJson(message)).build();
     }

@@ -108,7 +108,8 @@ public class DiarioDAO {
         String sql = String.format("delete from diariocontable where iddiario = '%1$d'", idDiario);
         try {
             conexion.conectar();
-            if (conexion.eliminar(sql) != -1) {
+            int result = conexion.eliminar(sql);
+            if (result != -1 && result != 0) {
                 return "Eliminacion Exitosa";
             }else{
                 return "Error Eliminacion";
