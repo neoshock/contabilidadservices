@@ -3,8 +3,7 @@ package com.webexample;
 import com.contabilidad.dao.DiarioDAO;
 import com.google.gson.Gson;
 import com.webexample.models.Diario;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.webexample.models.Message;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
@@ -51,8 +50,8 @@ public class DiarioService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addDiarioContable(String diarioJson) {
         JSONObject json = new JSONObject(diarioJson);
-        System.err.println(json);
         String message = "";
+        System.out.println(json);
         try {
             String date1 = json.getString("fechaApertura");
             String date2 = json.getString("fechaCierre");
@@ -60,17 +59,15 @@ public class DiarioService {
                     date1, date2, json.getString("descripcion"));
 
             if (!compareDataInsert(onDiario)) {
-                message = "{'message':'Ya_existe_un_Registro_con_ese_nombre'}";
-                return Response.status(406).build();
+                message = "Ya existe un Registro con ese nombre";
             } else {
                 if (diarioDAO.addNewDiario(onDiario)) {
-                    message = "{'message':'Registro_exitoso'}";
-                    return Response.ok(message).build();
+                    message = "Registro exitoso";
                 } else {
-                    message = "{'message':'Error_Al_Registrar'}";
-                    return Response.status(400).build();
+                    message = "Error Al Registrar";
                 }
             }
+            return Response.ok(getMessageJson(message)).build();
         } catch (Exception e) {
             System.out.println("Error : " + e.getMessage());
             return Response.status(500).build();
@@ -78,7 +75,7 @@ public class DiarioService {
 
     }
 
-    @Path("/edit")
+    @Path("edit")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -93,36 +90,34 @@ public class DiarioService {
                     date1, date2, json.getString("descripcion"));
 
             if (!compareDataEdit(onDiario)) {
-                message = "{'message':'Ya_existe_un_Registro_con_ese_nombre'}";
-                return Response.status(406).build();
+                message = "No se detectaron cambios";
             } else {
                 if (diarioDAO.updateDiario(onDiario)) {
-                    message = "{'message':'Modificacion_exitosa'}";
-                    return Response.ok(message).build();
+                    message = "Modificacion exitosa";
                 } else {
-                    message = "{'message':'Error_Al_Registrar'}";
-                    return Response.status(400).build();
+                    message = "Hubo un error al modificar el diario";
                 }
             }
+            return Response.ok(getMessageJson(message)).build();
         } catch (Exception e) {
             System.out.println("Error : " + e.getMessage());
             return Response.status(500).build();
         }
     }
-    
-    @Path("/delete/{iddiario}")
+
+    @Path("delete/{iddiario}")
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteDiarioContable(@PathParam("iddiario") int id) {
         String message = "";
         System.out.println(id);
-        if(diarioDAO.deleteDiario(id).equals("Eliminacion Exitosa")){
-            message = "{'message':'Eliminacion_exitosa'}";
-            return Response.ok(message).build();
-        }else{
-            return Response.status(400).build();
+        if (diarioDAO.deleteDiario(id).equals("Eliminacion Exitosa")) {
+            message = "Se ha eliminado el diario contable";
+        } else {
+            message = "El diario selecionado no se puede eliminar";
         }
+        return Response.ok(getMessageJson(message)).build();
     }
 
     private boolean compareDataInsert(Diario diario) {
@@ -133,6 +128,14 @@ public class DiarioService {
         } else {
             return true;
         }
+    }
+
+    private String getMessageJson(String msj) {
+        Gson jsonMessage = new Gson();
+        Message message = new Message();
+        message.setMessage(msj);
+        String result = jsonMessage.toJson(message, Message.class);
+        return result;
     }
 
     private boolean compareDataEdit(Diario diario) {
