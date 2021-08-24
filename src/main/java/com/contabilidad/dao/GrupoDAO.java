@@ -76,8 +76,7 @@ public class GrupoDAO {
             String sql = String.format("select insertgrupo('%1$s', '%2$s')",
                     grupo.getCodigo(), grupo.getNombre());
             result = conexion.ejecutar(sql);
-            result.next();
-            return true;
+            return result.next();
         } catch (SQLException e) {
             System.out.println("Error insertar Grupo" + e.getMessage());
         } finally {
@@ -91,9 +90,7 @@ public class GrupoDAO {
             String obj = gson.toJson(grupo);
             String sql = String.format("select updategrupocuenta('%1$s')", obj);
             result = conexion.ejecutar(sql);
-            if (result.next()) {
-                return true;
-            }
+            return result.next();
         } catch (SQLException e) {
             System.out.println("Error update Grupo" + e.getMessage());
         } finally {

@@ -1,8 +1,6 @@
 
 package com.webexample.models;
 
-import java.io.Serializable;
-
 public class Grupo {
     private int id;
     private String codigo, nombre;
