@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.json.JSONObject;
 
+//Especifica la ruta principal del modulo para diario contables
 @Path("diarios")
 @RequestScoped
 public class DiarioService {
@@ -34,6 +35,7 @@ public class DiarioService {
         diarioDAO = new DiarioDAO();
     }
 
+    //Metodo para la obtecion de datos
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,6 +46,7 @@ public class DiarioService {
         return Response.ok(value).build();
     }
 
+    //Metodo para realizar el registro de datos
     @Path("add")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,6 +78,7 @@ public class DiarioService {
 
     }
 
+    //Metodo para realizar la modificacion de algun dato
     @Path("edit")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -105,6 +109,8 @@ public class DiarioService {
         }
     }
 
+    //Metodo que raelizara la eliminacion de algun diario
+    //El metodo recibe un parametro por url que es la id del diario contable
     @Path("delete/{iddiario}")
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -120,6 +126,8 @@ public class DiarioService {
         return Response.ok(getMessageJson(message)).build();
     }
 
+    //Permite verificar que el diario a registrar no tenga un nombre ya existente en la 
+    //base de datos.
     private boolean compareDataInsert(Diario diario) {
         diarios = diarioDAO.getDiariosContables();
         long c = diarios.stream().filter(d -> diario.getNombre().equals(d.getNombre())).count();
@@ -130,6 +138,8 @@ public class DiarioService {
         }
     }
 
+    //El siguiente metodo nos permite convertir un String en un JSON que devolvera
+    //un mensaje que se lo pasa por parametro
     private String getMessageJson(String msj) {
         Gson jsonMessage = new Gson();
         Message message = new Message();
@@ -137,11 +147,15 @@ public class DiarioService {
         String result = jsonMessage.toJson(message, Message.class);
         return result;
     }
-
+    
+    //Al momento de editar un diario contable, verifica que existan cambios referente al asiento 
+    // a modificar
     private boolean compareDataEdit(Diario diario) {
         Diario oldDiario = diarioDAO.getDiarioById(diario.getIdDiario());
-        if (oldDiario.getNombre().equals(diario.getNombre()) && oldDiario.getFechaApertura().equals(diario.getFechaApertura())
-                && oldDiario.getFechaCierre().equals(diario.getFechaCierre()) && oldDiario.getDescripcion().equals(diario.getDescripcion())) {
+        if (oldDiario.getNombre().equals(diario.getNombre()) && 
+                oldDiario.getFechaApertura().equals(diario.getFechaApertura())
+                && oldDiario.getFechaCierre().equals(diario.getFechaCierre()) && 
+                oldDiario.getDescripcion().equals(diario.getDescripcion())) {
             return false;
         } else {
             return true;

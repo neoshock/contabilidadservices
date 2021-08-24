@@ -24,7 +24,9 @@ public class DiarioDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 diarios.add(new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion")));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), 
+                        dateFormat.format(resultSet.getDate("fechaCierre")), 
+                        resultSet.getString("descripcion")));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -43,7 +45,9 @@ public class DiarioDAO {
             resultSet = conexion.ejecutar(sql);
             while (resultSet.next()) {
                 diario = new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion"));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), 
+                        dateFormat.format(resultSet.getDate("fechaCierre")), 
+                        resultSet.getString("descripcion"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -62,7 +66,9 @@ public class DiarioDAO {
             resultSet = conexion.ejecutar(sql);
             while (resultSet.next()) {
                 diario = new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
-                        dateFormat.format(resultSet.getDate("fechaApertura")), dateFormat.format(resultSet.getDate("fechaCierre")), resultSet.getString("descripcion"));
+                        dateFormat.format(resultSet.getDate("fechaApertura")), 
+                        dateFormat.format(resultSet.getDate("fechaCierre")), 
+                        resultSet.getString("descripcion"));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -74,7 +80,9 @@ public class DiarioDAO {
 
     public boolean addNewDiario(Diario diario) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sql = String.format("select addNewDiario('%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), diario.getDescripcion());
+        String sql = String.format("select addNewDiario('%1$s','%2$s','%3$s','%4$s')", 
+                diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), 
+                diario.getDescripcion());
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
@@ -90,7 +98,9 @@ public class DiarioDAO {
 
     public boolean updateDiario(Diario diario) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sql = String.format("select updateDiarioContable('%5$d','%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), diario.getDescripcion(), diario.getIdDiario());
+        String sql = String.format("select updateDiarioContable('%5$d','%1$s','%2$s','%3$s','%4$s')", 
+                diario.getNombre(),diario.getFechaApertura(),diario.getFechaCierre(), 
+                diario.getDescripcion(), diario.getIdDiario());
         try {
             conexion.conectar();
             resultSet = conexion.ejecutar(sql);
